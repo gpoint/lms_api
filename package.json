@@ -1,0 +1,32 @@
+{
+  "name": "lms_api",
+  "version": "1.0.0",
+  "description": "Learning Management System API",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gpoint/lms_api.git"
+  },
+  "keywords": [
+    "lms",
+    "cstemp",
+    "c-stemp",
+    "api",
+    "learning",
+    "management",
+    "system"
+  ],
+  "author": "Harry",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gpoint/lms_api/issues"
+  },
+  "homepage": "https://github.com/gpoint/lms_api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
