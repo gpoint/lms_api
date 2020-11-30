@@ -4,6 +4,7 @@ var uniqueValidator = require('mongoose-unique-validator');
 var mongoConfig = require('../config/credentials');
 
 mongoose.set('useCreateIndex', true);
+mongoose.Promise = global.Promise;
 var  { Schema } = mongoose;
 var objectId = Schema.Types.ObjectId;
 

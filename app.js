@@ -14,17 +14,22 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jsx');
 app.engine('jsx', require('express-react-views').createEngine());
 
-
 app.use(express.json());
+
+// parse requests of content-type: application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: false}));
 
 app.use(cookieParser());
+
+//parse a request of content type: application/json
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(morgan('combined', { stream: winston.stream }));
 
-app.use('/api', cors(), apiRouter);
+var corsOptions = {origin: process.env.LOCALHOST};
+
+app.use('/api', cors(corsOptions), apiRouter);
 
 app.use(function(req, res, next){
     next(creatError(404));

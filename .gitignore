@@ -1,8 +1,11 @@
 config/
 logs/
 node_modules/
-.vscode/settings.json
+.vscode/
 package.json
-*.log
+logs/
 yarn-error.log
-yarn.lock
+error.log
+.env
+yarn-lock
+

@@ -40,19 +40,32 @@ router.put('/instructor/:iid', instructorControls.update);
 //DELETES
 router.delete('/instructor/:iid', instructorControls.delete);
 
-/**USER ACCESS POINTS */
-//GETS
-router.get('/user/login', userControls.login);
-router.get('/user/dashboard', userControls.dashboard);
 
-//POSTS
+/**USER ACCESS POINTS */
+//Get all users
+router.get('/user', userControls.users);
+
+//get user by ID
+router.get('/user/:id', userControls.user);
+
+//get user by email
+router.get('/user?email', userControls.email)
+
+//Create a user
 router.post('/user/create', userControls.create);
 
-//PUTS
-router.put('/user/:uid', userControls.update);
+//Update a user by ID
+router.put('/user/update', userControls.update);
 
-//DELETES
+//Update a user by email
+router.put('/user/updatebyemail', userControls.updateByEmail);
+
+//Delete all users
+router.delete('/users', userControls.deletes)
+
+//Delete user by id
 router.delete('/user/:uid', userControls.delete);
+
 
 /**COURSE ACCESS POINTS */
 //GETS
