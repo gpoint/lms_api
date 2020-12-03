@@ -2,12 +2,13 @@
 
 const mongoose = require('mongoose');
 const { User } = require('../models/allmodels');
+const { Course } = require('../models/allmodels');
 
 //Create retrieve update and delete handlers
 
 module.exports = {
 
-    //Create user
+    //Create a new user
     create: function(req, res){ 
         if (!req.body) {
             res.status(400).send({ message: "Content can not be empty!" });
@@ -19,8 +20,8 @@ module.exports = {
         user.setPassword(req.body.password);
     
         user.save().then(result => { 
-            res.json({"message":"Successfully saved",
-                      "Data": result
+            res.json({"message":"Successfully created a new user avccount",
+                      "data": result
             }) }).catch(err => {
             if(err) { 
                 res.status(500).send({
@@ -56,13 +57,13 @@ module.exports = {
 
     //Retrieve user by Email
     email: function (req, res){
-        User.find({email: req.query.email}).then(data => {
+        User.find({email: req.params.email}).then(data => {
             if(!data){
-                res.status(404).send({message: `Not found user with id ${res.query.email}`})
+                res.status(404).send({message: `Not found user with id ${res.params.email}`})
             }
             else res.send(data)
         }).catch(err => {
-            res.status(500).send({message: `Error occured while retrieving user with email: ${req.query.email}`});
+            res.status(500).send({message: `Error occured while retrieving user with email: ${req.params.email}`});
         });
         
     },
@@ -84,9 +85,10 @@ module.exports = {
             }
             else res.send({message: "User was updated successfully"});
         }).catch(err => {
-            res.status(500).send({message: `Error updating User with id: ${id}`});
+            res.status(500).send({message: `Error occured while updating User with id: ${id}`});
         });
     },
+
     //Update user by email
     updateByEmail: function(req, res){
         let email = req.body.email
@@ -98,10 +100,11 @@ module.exports = {
             }
             else res.send({message: "User was updated successfully"});
         }).catch(err => {
-            res.status(500).send({message: `Error updating user with email: ${email}`})
+            res.status(500).send({message: `Error occured while updating user with email: ${email}`})
         })
     },
 
+    //Delete user by id
     delete: function(req, res){ 
         let id = req.params.id;
 
@@ -118,6 +121,7 @@ module.exports = {
         });
     },
 
+    //Delete all users
     deletes: function(req, res){
         User.deleteMany({}).then(data => {
             res.send({
@@ -128,6 +132,15 @@ module.exports = {
                 message: err.message || "Error occured while removing all Users"
             });
         });
-    }
+    },
 
+    //Submit assignment
+    submitAssignment: function(req, res){
+
+    },
+
+    //Give feedback to instructor
+    submitFeedback: function(req, res){
+
+    },
 }

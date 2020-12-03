@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
-var winston = require('./config/winstonConfig');
+const winston = require('./config/winstonConfig');
 const apiRouter = require('./routes/accesspoints');
 
 const app = express();

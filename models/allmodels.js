@@ -11,15 +11,15 @@ var objectId = Schema.Types.ObjectId;
 
 var UserSchema = new Schema({
     _id: objectId,
-    firstName: {type: String, default: null, required: [true, "Can't be blank"]},
-    lastName: {type: String, default: null, required: [true, "Can't be blank"]} ,
-    email: {type: String, default: null, unique: true, required: [true, "can't be blank"]},
-    phone: {type: String, default: null, unique: true },
-    passwordHash: {type: String, default: null },
-    salt: {type: String, default: null },
-    socialLinks: {type: [ String ], default: null },
-    biography: {type: String, default: null},
-    roleId: {type: String, unique: true},
+    firstName: { type: String, default: null, required: [true, "Can't be blank"]},
+    lastName: { type: String, default: null, required: [true, "Can't be blank"]} ,
+    email: { type: String, default: null, unique: true, required: [true, "can't be blank"]},
+    phone: { type: String, default: null, unique: true },
+    passwordHash: { type: String, default: null },
+    salt: { type: String, default: null },
+    socialLinks: { type: [ String ], default: null },
+    biography: { type: String, default: null},
+    roleId: {type: objectId, ref: 'Role', unique: true },
     watchHistory: { type: String, default: null},
     wishlist: { type: String, default: null},
     title: { type: String, default: null},
@@ -27,8 +27,9 @@ var UserSchema = new Schema({
     stripeKeys: { type: String, default: null, unique: true },
     verificationCode: { type: String, default: null },
     status: { type: String, default: null },
-    isInstructor: { type: Boolean, default: false }
-}, {timestamps: true})  //createdAt and updatedAt field will be created on user model
+    isInstructor: { type: Boolean, default: false },
+    isAdmin: { type: Boolean, default: false },
+}, { timestamps: true})  //createdAt and updatedAt field will be created on user model
 UserSchema.plugin(uniqueValidator, {message: 'is already taken'});
 
 
@@ -65,8 +66,8 @@ SettingSchema.plugin(uniqueValidator, {message: 'is already taken'});
 
 var SectionSchema = new Schema({
     _id: objectId,
-    title: { type: String, default: true },
-    courseId: { type: Number, ref: 'Course' },
+    title: { type: String, default: null },
+    courseId: { type: objectId, ref: 'Course' },
     order: {type: Number, default: 0}
 }); 
 SectionSchema.plugin(uniqueValidator, {message: 'is already taken'});
@@ -81,10 +82,10 @@ RoleSchema.plugin(uniqueValidator, {message: 'is already taken'});
 
 var ReportSchema = new Schema({
     _id: objectId,
-    user: { type: Number, ref: 'User'},
-    report: { type: String, default:''},
-    subject: { type: String, default:''},
-    reportCase: {type: Number, default:''}
+    user: { type: objectId, ref: 'User'},
+    report: { type: objectId, ref: 'Report'},
+    subject: { type: String, default:null},
+    reportCase: {type: Number, default:null}
 });
 ReportSchema.plugin(uniqueValidator, {message: 'is already taken'});
 
@@ -92,7 +93,7 @@ ReportSchema.plugin(uniqueValidator, {message: 'is already taken'});
 var RatingSchema = new Schema({
     _id: objectId,
     rating: { type: Number, default: null },
-    userId: { type: Number, ref: 'User' },
+    userId: { type: objectId, ref: 'User' },
     ratableType: { type: String, default: null },
     review: { type: String, default: null } 
 }, { timestamps: true }); // createdAt and updateAt field will be added to Rating model automatically
@@ -113,11 +114,11 @@ QuestionSchema.plugin(uniqueValidator, {message: 'is already taken'});
 
 var ProgramUsersSchema = new Schema({
     _id: objectId,
-    user: { type: Number, ref: 'User'},
-    program: { type: Number, ref: 'Program' },
+    user: { type: objectId, ref: 'User'},
+    program: { type: objectId, ref: 'Program' },
     center: { type: Number, required: true },
     parent: { type: Number, required: true},
-    role: { type: Number, ref: 'Role'}, 
+    role: { type: objectId, ref: 'Role'}, 
     details: { type: String, required:true}
 }); 
 ProgramUsersSchema.plugin(uniqueValidator, {message: 'is already taken'});
@@ -139,7 +140,7 @@ ProgramSchema.plugin(uniqueValidator, {message: 'is already taken'});
 
 var PortfolioSchema = new Schema({
     _id: objectId,
-    programUser: { type: Number, ref: 'User'},
+    programUser: { type: objectId, ref: 'User'},
     title: { type: String, required: true },
     attachement: { type: String, required: true },
     assessmentStatus: { type: String, required: true }, 
@@ -151,7 +152,7 @@ PortfolioSchema.plugin(uniqueValidator, {message: 'is already taken'});
 
 var PayoutSchema = new Schema({
     _id: objectId,
-    userId: { type: Number, ref: 'User' },
+    userId: { type: objectId, ref: 'User' },
     paymentType: { type: String, default: null },
     amount: { type: Number, default: null },
     status: { type: Number, default: 0}
@@ -161,9 +162,9 @@ PayoutSchema.plugin(uniqueValidator, {message: 'is already taken '});
 
 var PaymentSchema = new Schema({
     _id: objectId,
-    userId: { type: Number, ref: 'User' },
+    userId: { type: objectId, ref: 'User' },
     paymentType: { type: String, default: null },
-    courseId: { type: Number, default: null },
+    courseId: { type: objectId, ref: 'Course', default: null },
     amount: { type: Number, default: null },
     adminRevenue: { type: String, default: null },
     instructorRevenue: { type: String, default: null },
@@ -204,8 +205,8 @@ var LessonSchema = new Schema({
     _id: objectId,
     title: { type: String, default: true},
     duration: { type: String, default: null },
-    courseId: { type: Number, default: null },
-    sectionId: { type: Number, default: null },
+    courseId: { type: objectId, ref:'Course', default: null },
+    sectionId: { type: objectId, ref:'Section', default: null },
     videoType: { type: String, default: null },
     lessonType: { type: String, default: null },
     attachement: { type: String, default: null },
@@ -238,8 +239,8 @@ FrontEndSchema.plugin(uniqueValidator, { message: 'is already taken '});
 
 var EnrolSchema = new Schema({
     _id: objectId,
-    userId: { type: Number, ref: 'User'},
-    courseId: { type: Number, ref: 'Course' },
+    userId: { type: objectId, ref: 'User'},
+    courseId: { type: objectId, ref: 'Course' },
 }, { timestamps: true });
 EnrolSchema.plugin(uniqueValidator, { message: 'is already taken '});
 
@@ -262,8 +263,8 @@ var CourseSchema = new Schema({
     shortDescription: { type: String, default: null },
     description: { type: String, default: null },
     outcomes: { type: String, default: null },
-    language: { type: String, default: null },
-    categoryId: { type: Number, default: null },
+    language: { type: objectId, ref: 'Language'},
+    categoryId: { type: objectId, ref: 'Category' },
     subCategoryId: { type: Number, default: null },
     section: { type: String, default: null }, 
     requirements: { type: String, default: null },
@@ -271,15 +272,14 @@ var CourseSchema = new Schema({
     discountFlag: { type: Number, default: 0 },
     discountedPrice: { type: Number, default: null },
     level: { type: String, default: null },
-    userId: { type: Number, ref: 'User'}, 
+    userId: { type: objectId, ref: 'User'}, 
     thumbnail: { type: String, default: null },
     videoUrl: { type: String, default: null },
     visibility: { type: Boolean, default: null },
     isTopCourse: { type: Boolean, default: null },
-    isAdmin: { type: Boolean, default: null },
     status: { type: String, default: null },
     courseOverviewProvider: { type: String, default: null },
-    metaKeywords: { type: String, default: null },
+    metaKeywords: { type: [ String ] , default: [] },
     metaDescription: { type: String, default: null },
     isFreeCourse: { type: Boolean, default: null }
 }, { timestamps: true });
@@ -289,7 +289,7 @@ CourseSchema.plugin(uniqueValidator, { message: 'is already taken '});
 var CommentSchema = new Schema({
     _id: objectId,
     body: { type: String, default: null },
-    userId: { type: Number, ref: 'User' },
+    userId: { type: objectId, ref: 'User' },
     commentableId: { type: Number, unique: true, default: null },
     commentableType: { type: String, default: null },
 }, {timestamps: true });
@@ -300,16 +300,16 @@ var CISessionSchema = new Schema({
     _id: objectId,
     ipAddress: { type: String, required: true },
     timesstamp: { type: Date, default: Date.now },
-    data: { type: Buffer, required: true }
+    data: { type: Buffer, default: null }
 });
 CISessionSchema.plugin(uniqueValidator, { message: 'is already taken '});
 
 
 var CentresSchema = new Schema({
     _id: objectId,
-    centerHead: { type: Number, ref: 'User' },
+    centerHead: { type: objectId, ref: 'User' },
     centerName: { type: String, required: true },
-    program: { type: Number, ref: 'Program' },
+    program: { type: objectId, ref: 'Program' },
     centresAddress: { type: String, required: true }
 }); 
 CentresSchema.plugin(uniqueValidator, { message: 'is already taken '});
@@ -329,7 +329,7 @@ CategorySchema.plugin(uniqueValidator, { message: 'is already taken '});
 
 var ApplicationSchema = new Schema({
     _id: objectId,
-    userId: { type: Number, ref: 'User' },
+    userId: { type: objectId, ref: 'User' },
     address: { type: String, default: null },
     phone: { type: String, default: null },
     message: { type: String, default: null },
